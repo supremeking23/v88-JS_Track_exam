@@ -2,6 +2,11 @@ const express = require("express");
 const app = express();
 const PORT = 7000;
 
+const server = app.listen(PORT, (req, res) => {
+	console.log(`server is listening to port ${PORT}`);
+});
+const io = require("socket.io")(server);
+
 let bodyParser = require("body-parser");
 let session = require("express-session");
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -15,6 +20,54 @@ app.use(
 	})
 );
 
+let users = [
+	{
+		name: "ivan",
+		mouse_coordinates: {
+			x: 100,
+			y: 100,
+		},
+	},
+];
+io.on("connection", function (socket) {
+	console.log(`a user is connected`);
+	socket.on("new_connection", function (data) {
+		socket.broadcast.emit("load_users", { users });
+		socket.emit("load_users", { users });
+
+		socket.on("add_user", function (data) {
+			let user = {
+				name: data.user,
+			};
+			users.push(user);
+			console.log(user);
+			socket.broadcast.emit("load_users", { users });
+			socket.emit("load_users", { users });
+		});
+		// socket.broadcast.emit("color", { data: color });
+	});
+
+	// socket.on("add_user", function (data) {
+	// 	users.push(data.user);
+	// 	console.log(users);
+	// });
+
+	// socket.on("add_message", function (data) {
+	// 	console.log(data);
+	// 	let message = {
+	// 		name: data.message.from,
+	// 		message: data.message.message,
+	// 	};
+	// 	messages.push(message);
+	// 	socket.emit("load_messages", { messages: messages });
+	// 	socket.broadcast.emit("load_messages", { messages: messages });
+	// });
+
+	socket.on("disconnect", function () {
+		console.log(`a user is disconnected`);
+	});
+});
+
 // for image/js/css
 app.use(express.static(__dirname + "/assets"));
 // This sets the location where express will look for the ejs views
@@ -24,7 +77,3 @@ app.set("view engine", "ejs");
 // use app.get method and pass it the base route '/' and a callback
 
 require("./routes.js")(app);
-
-app.listen(PORT, (req, res) => {
-	console.log(`server is listening at ${PORT}`);
-});

@@ -16,9 +16,40 @@
 	<link rel="stylesheet/less" type="text/css" href="/less/styles.less" />
 	<script src="//cdn.jsdelivr.net/npm/less@3.13"></script>
 
+	<script
+		src="https://cdn.socket.io/3.1.3/socket.io.min.js"
+		integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh"
+		crossorigin="anonymous"
+	></script>
+
 	<script src="/js/Shapes.js"></script>
 	<script>
 		$(document).ready(function () {
+			const socket = io();
+			socket.emit("new_connection", { msg: "load messages" });
+			socket.on("load_users", function (data) {
+				console.log(data);
+				let html = ``;
+				for (let i = 0; i < data.users.length; i++) {
+					html += `<li>${data.users[i].name}</li>`;
+				}
+				$(".list-of-players").html(html);
+			});
+
+			let modal = $(".modal").modal();
+
+			modal.modal("open");
+
+			$(".add-player").submit(function () {
+				$.post($(this).attr("action"), $(this).serialize(), function (res) {
+					// console.log(res.msg);
+					// $(".message-of-user").val(res.name);
+					socket.emit("add_user", { user: res.name });
+				});
+				return false;
+			});
+
+			// UI related
 			let buttons = document.querySelectorAll("button");
 			let canvas = document.querySelector(".canvas");
 			let shapeColor = "#f57f17"; //default
@@ -51,7 +82,7 @@
 					shapes[i].style.height = `${parseInt(shapes[i].style.height) - 10}px`;
 					shapes[i].style.width = `${parseInt(shapes[i].style.width) - 10}px`;
 
-					console.log(shapes[i].childNodes);
+					// console.log(shapes[i].childNodes);
 
 					shapes[i].childNodes[0].style.top = `${parseInt(shapes[i].childNodes[0].style.top) - 5}px`;
 
@@ -95,29 +126,36 @@
 			</div>
 		</nav>
 
+		<div class="container">
+			<div class="row">
+				<div class="col s12">
+					<div id="modal1" class="modal">
+						<form action="add-player" class="add-player" method="POST">
+							<div class="modal-content">
+								<h4 class="">Please enter your name:</h4>
+								<div class="row">
+									<div class="input-field col s12">
+										<input id="name" type="text" name="name" />
+										<label for="name">Name</label>
+									</div>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="submit" class="modal-close waves-effect waves-green btn-flat light-blue darken-4">Enter</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<main>
 			<!-- canvas -->
-			<div class="canvas">
-				<!-- <div
-					class="shapes"
-					style="
-						position: absolute;
-						top: 40px;
-						left: 80 px;
-						width: 200px;
-						height: 200px;
-						border-radius: 50%;
-						background-color: #fff;
-						color: red;
-					"
-				>
-					<p style="position: absolute; right: 80px; top: 90px">Mavis</p>
-				</div> -->
-			</div>
+			<div class="canvas"></div>
 			<!-- players -->
 			<div class="players">
 				<h6>The players in this server:</h6>
-				<ul>
+				<ul class="list-of-players">
 					<li>Ivan</li>
 					<li>Mavis</li>
 				</ul>

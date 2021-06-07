@@ -19,6 +19,10 @@ class Application {
 	index(req, res) {
 		res.render("application");
 	}
+
+	add_player(req, res) {
+		res.json({ msg: "new user has join the game", name: req.body.name });
+	}
 }
 
 module.exports = Application;

@@ -38,11 +38,16 @@ io.on("connection", function (socket) {
 		socket.on("add_user", function (data) {
 			let user = {
 				name: data.user,
+				socket_id: socket.id,
 			};
 			users.push(user);
 			console.log(user);
 			socket.broadcast.emit("load_users", { users });
 			socket.emit("load_users", { users });
+
+			// for mouse cursor
+			// socket.broadcast.emit("mouse_cursor", { user });
+			socket.emit("mouse_cursor", { data: user });
 		});
 
 		socket.on("canvas_click_request", function (data) {
@@ -69,7 +74,8 @@ io.on("connection", function (socket) {
 		});
 
 		socket.on("mouse_activity", function (data) {
-			console.log(`user : ${data.player},x:${data.x},y:${data.y}`);
+			// console.log(`user : ${data.player},x:${data.x},y:${data.y}`);
+			console.log(data);
 			// let player = {
 			// 	name: data.player,
 			// 	x: data.x,
@@ -77,6 +83,7 @@ io.on("connection", function (socket) {
 			// };
 			// user_mousemovement.push(player);
 			socket.broadcast.emit("mouse_activity_response", { player: data.player, x: data.x, y: data.y, socket_id: socket.id });
+			// socket.emit("mouse_activity_response", { player: data.player, x: data.x, y: data.y, socket_id: socket.id });
 			// socket.emit("mouse_activity_response", { player: data.player, x: data.x, y: data.y });
 		});
 
@@ -85,6 +92,8 @@ io.on("connection", function (socket) {
 
 	socket.on("disconnect", function () {
 		console.log(`a user is disconnected`);
+
+		// users = [];
 	});
 });
 

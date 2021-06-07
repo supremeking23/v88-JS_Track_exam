@@ -125,7 +125,7 @@
 
 			$(document).on("mousemove", function (e) {
 				console.log(`mouse activity by ${$(".thisPlayer").val()}`);
-				socket.emit("mouse_activity", { y: e.clientY, x: e.clientX, player: $(".thisPlayer").val() });
+				socket.emit("mouse_activity", { y: e.clientY, x: e.clientX, player: "ivan", socket_id: 23 });
 			});
 
 			socket.on("mouse_activity_response", function (data) {
@@ -143,6 +143,20 @@
 				let pointer = $(`#cursur_${data.socket_id}`);
 				pointer.css("left", data.x);
 				pointer.css("top", data.y);
+
+				let cursors = document.querySelectorAll(".pointer");
+
+				for (let i = 1; i < cursors.length; i++) {
+					if (cursors[i] != 1) {
+						cursors[i].remove();
+					}
+				}
+
+				// console.log(document.querySelectorAll(".pointer").length);
+				// let mouseCursor = document.querySelectorAll(".pointer").length;
+				// mouseCursor = mouseCursor.slice(-1);
+				// console.log(mouseCursor);
+				// console.log(typeof document.querySelectorAll(".pointer").length);
 			});
 		});
 	</script>
@@ -204,8 +218,8 @@
 			<div class="players">
 				<h6>The players in this server:</h6>
 				<ul class="list-of-players">
-					<li>Ivan</li>
-					<li>Mavis</li>
+					<!-- <li>Ivan</li>
+					<li>Mavis</li> -->
 				</ul>
 			</div>
 		</main>

@@ -17,10 +17,12 @@ class Application {
 	constructor() {}
 
 	index(req, res) {
+		// res.render("application", { thisPlayer: req.session.this_player != undefined ? req.session.this_player : "" });
 		res.render("application");
 	}
 
 	add_player(req, res) {
+		// req.session.this_player = req.body.name;
 		res.json({ msg: "new user has join the game", name: req.body.name });
 	}
 }

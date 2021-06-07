@@ -21,13 +21,13 @@ app.use(
 );
 
 let users = [
-	{
-		name: "ivan",
-		mouse_coordinates: {
-			x: 100,
-			y: 100,
-		},
-	},
+	// {
+	// 	name: "ivan",
+	// 	mouse_coordinates: {
+	// 		x: 100,
+	// 		y: 100,
+	// 	},
+	// },
 ];
 io.on("connection", function (socket) {
 	console.log(`a user is connected`);
@@ -46,22 +46,6 @@ io.on("connection", function (socket) {
 		});
 		// socket.broadcast.emit("color", { data: color });
 	});
-
-	// socket.on("add_user", function (data) {
-	// 	users.push(data.user);
-	// 	console.log(users);
-	// });
-
-	// socket.on("add_message", function (data) {
-	// 	console.log(data);
-	// 	let message = {
-	// 		name: data.message.from,
-	// 		message: data.message.message,
-	// 	};
-	// 	messages.push(message);
-	// 	socket.emit("load_messages", { messages: messages });
-	// 	socket.broadcast.emit("load_messages", { messages: messages });
-	// });
 
 	socket.on("disconnect", function () {
 		console.log(`a user is disconnected`);

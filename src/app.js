@@ -70,7 +70,13 @@ io.on("connection", function (socket) {
 
 		socket.on("mouse_activity", function (data) {
 			console.log(`user : ${data.player},x:${data.x},y:${data.y}`);
-			socket.broadcast.emit("mouse_activity_response", { player: data.player, x: data.x, y: data.y });
+			// let player = {
+			// 	name: data.player,
+			// 	x: data.x,
+			// 	y: data.y,
+			// };
+			// user_mousemovement.push(player);
+			socket.broadcast.emit("mouse_activity_response", { player: data.player, x: data.x, y: data.y, socket_id: socket.id });
 			// socket.emit("mouse_activity_response", { player: data.player, x: data.x, y: data.y });
 		});
 

@@ -132,8 +132,15 @@
 				// let pointer = `<div class="pointer"></div>`;
 				// pointer.css("left", data.x);
 				// pointer.css("top", data.y);
-				$("body").append(`<div class="pointer"><i class="fa fa-mouse-pointer" aria-hidden="true"></i> ${data.player}</div>`);
-				let pointer = $(".pointer");
+				// if ($(`.pointer[socket_id]="${data.socket_id}"`).length <= 0) {
+
+				// }
+
+				$("body").append(
+					`<div class="pointer" id="cursur_${data.socket_id}"><i class="fa fa-mouse-pointer"  aria-hidden="true"></i> ${data.player}</div>`
+				);
+				// let pointer = $(`.pointer[socket_id = "${data.socket_id}"]`);
+				let pointer = $(`#cursur_${data.socket_id}`);
 				pointer.css("left", data.x);
 				pointer.css("top", data.y);
 			});

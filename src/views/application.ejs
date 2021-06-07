@@ -25,6 +25,8 @@
 	<script src="/js/Shapes.js"></script>
 	<script>
 		$(document).ready(function () {
+			let modal = $(".modal").modal();
+			modal.modal("open");
 			const socket = io();
 			socket.emit("new_connection", { msg: "load messages" });
 			socket.on("load_users", function (data) {
@@ -36,13 +38,8 @@
 				$(".list-of-players").html(html);
 			});
 
-			let modal = $(".modal").modal();
-
-			modal.modal("open");
-
 			$(".add-player").submit(function () {
 				$.post($(this).attr("action"), $(this).serialize(), function (res) {
-					// console.log(res.msg);
 					$(".thisPlayer").val(res.name);
 					socket.emit("add_user", { user: res.name });
 				});
@@ -66,7 +63,7 @@
 						shapeColor = "#311b92";
 					} else if (buttons[i].classList.contains("btn-clear")) {
 						let shapeColor = "#f57f17"; //back to default
-						canvas.innerHTML = "";
+						socket.emit("clear_screen_request");
 					}
 				});
 			}
@@ -82,15 +79,16 @@
 					x: e.clientX,
 					shapeColor,
 				});
-
-				// let shape = new Shape(e.clientY, e.clientX, shapeColor, player_name_in_circle);
-				// canvas.innerHTML += shape.display();
 			});
 
 			socket.on("canvas_click_response", function (data) {
 				console.log(data.message);
 				let shape = new Shape(data.y, data.x, data.shapeColor, data.player_name_in_circle);
 				canvas.innerHTML += shape.display();
+			});
+
+			socket.on("clear_screen_response", function (data) {
+				canvas.innerHTML = "";
 			});
 
 			function shrink() {
@@ -109,22 +107,6 @@
 						shapes[i].remove();
 					}
 				}
-
-				// let shapes = document.querySelectorAll("div.shapes");
-				// for (let i = 0; i < shapes.length; i++) {
-				// 	shapes[i].style.height = `${parseInt(shapes[i].style.height) - 10}px`;
-				// 	shapes[i].style.width = `${parseInt(shapes[i].style.width) - 10}px`;
-
-				// 	// console.log(shapes[i].childNodes);
-
-				// 	shapes[i].childNodes[0].style.top = `${parseInt(shapes[i].childNodes[0].style.top) - 5}px`;
-
-				// 	shapes[i].childNodes[0].style.right = `${parseInt(shapes[i].childNodes[0].style.right) - 5}px`;
-
-				// 	if (parseInt(shapes[i].style.height) === 10 && parseInt(shapes[i].style.width) === 10) {
-				// 		shapes[i].remove();
-				// 	}
-				// }
 			}
 
 			setInterval(() => {

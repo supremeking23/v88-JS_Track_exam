@@ -62,6 +62,11 @@ io.on("connection", function (socket) {
 				shapeColor: data.shapeColor,
 			});
 		});
+
+		socket.on("clear_screen_request", function (data) {
+			socket.broadcast.emit("clear_screen_response");
+			socket.emit("clear_screen_response");
+		});
 		// socket.broadcast.emit("color", { data: color });
 	});
 

@@ -44,6 +44,24 @@ io.on("connection", function (socket) {
 			socket.broadcast.emit("load_users", { users });
 			socket.emit("load_users", { users });
 		});
+
+		socket.on("canvas_click_request", function (data) {
+			console.log(data.message);
+			socket.broadcast.emit("canvas_click_response", {
+				message: `update other user`,
+				player_name_in_circle: data.player_name_in_circle,
+				x: data.x,
+				y: data.y,
+				shapeColor: data.shapeColor,
+			});
+			socket.emit("canvas_click_response", {
+				message: `update my screen`,
+				player_name_in_circle: data.player_name_in_circle,
+				x: data.x,
+				y: data.y,
+				shapeColor: data.shapeColor,
+			});
+		});
 		// socket.broadcast.emit("color", { data: color });
 	});
 

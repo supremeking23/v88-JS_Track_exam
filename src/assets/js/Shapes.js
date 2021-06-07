@@ -11,8 +11,8 @@ class Shape {
 	};
 
 	display() {
-		return `<div class="shapes" style="position:absolute; top: ${this._y - 40}px; left: ${
-			this._x - 80
+		return `<div class="shapes" style="position:absolute; top: ${this._y - 170}px; left: ${
+			this._x - 100
 		}px;  width: 200px; height: 200px; border-radius:50%; background-color: ${
 			this._shapeColor
 		};color:#000"><p style="position: absolute;right: 80px;top: 90px;">${this._player_name}</p></div>`;

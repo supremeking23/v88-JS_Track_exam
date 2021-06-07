@@ -72,9 +72,24 @@
 			}
 
 			canvas.addEventListener("click", function (e) {
+				//name ng user
 				let player_name_in_circle = $(".thisPlayer").val();
-				console.log(player_name_in_circle);
-				let shape = new Shape(e.clientY, e.clientX, shapeColor, player_name_in_circle);
+				socket.emit("canvas_click_request", {
+					message: `canvas has been click by ${player_name_in_circle}`,
+					player_name_in_circle: player_name_in_circle,
+
+					y: e.clientY,
+					x: e.clientX,
+					shapeColor,
+				});
+
+				// let shape = new Shape(e.clientY, e.clientX, shapeColor, player_name_in_circle);
+				// canvas.innerHTML += shape.display();
+			});
+
+			socket.on("canvas_click_response", function (data) {
+				console.log(data.message);
+				let shape = new Shape(data.y, data.x, data.shapeColor, data.player_name_in_circle);
 				canvas.innerHTML += shape.display();
 			});
 
@@ -94,10 +109,27 @@
 						shapes[i].remove();
 					}
 				}
+
+				// let shapes = document.querySelectorAll("div.shapes");
+				// for (let i = 0; i < shapes.length; i++) {
+				// 	shapes[i].style.height = `${parseInt(shapes[i].style.height) - 10}px`;
+				// 	shapes[i].style.width = `${parseInt(shapes[i].style.width) - 10}px`;
+
+				// 	// console.log(shapes[i].childNodes);
+
+				// 	shapes[i].childNodes[0].style.top = `${parseInt(shapes[i].childNodes[0].style.top) - 5}px`;
+
+				// 	shapes[i].childNodes[0].style.right = `${parseInt(shapes[i].childNodes[0].style.right) - 5}px`;
+
+				// 	if (parseInt(shapes[i].style.height) === 10 && parseInt(shapes[i].style.width) === 10) {
+				// 		shapes[i].remove();
+				// 	}
+				// }
 			}
 
 			setInterval(() => {
 				// console.log("hi");
+
 				shrink();
 			}, 500);
 		});

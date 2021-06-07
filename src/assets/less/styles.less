@@ -11,10 +11,21 @@
 body {
 	font-family: Verdana, Geneva, Tahoma, sans-serif;
 	background: @body-background;
+	position: relative;
 }
 
 body * {
 	outline: 1px dashed red;
+}
+
+.pointer {
+	position: absolute;
+	// background: red;
+	width: 10px;
+	height: 5px;
+	z-index: 3;
+	cursor: pointer;
+	color: #fff;
 }
 
 .mt-2 {

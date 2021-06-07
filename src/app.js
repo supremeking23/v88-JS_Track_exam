@@ -67,6 +67,13 @@ io.on("connection", function (socket) {
 			socket.broadcast.emit("clear_screen_response");
 			socket.emit("clear_screen_response");
 		});
+
+		socket.on("mouse_activity", function (data) {
+			console.log(`user : ${data.player},x:${data.x},y:${data.y}`);
+			socket.broadcast.emit("mouse_activity_response", { player: data.player, x: data.x, y: data.y });
+			// socket.emit("mouse_activity_response", { player: data.player, x: data.x, y: data.y });
+		});
+
 		// socket.broadcast.emit("color", { data: color });
 	});
 

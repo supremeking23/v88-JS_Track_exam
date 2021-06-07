@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+	<!--Import Google Icon Font-->
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+	<!-- Compiled and minified CSS -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+
+	<!-- Compiled and minified JavaScript -->
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+	<link rel="stylesheet/less" type="text/css" href="/less/styles.less" />
+	<script src="//cdn.jsdelivr.net/npm/less@3.13"></script>
+
+	<script src="/js/Shapes.js"></script>
+	<script>
+		$(document).ready(function () {
+			let buttons = document.querySelectorAll("button");
+			let canvas = document.querySelector(".canvas");
+			let shapeColor = "#f57f17"; //default
+
+			for (let i = 0; i < buttons.length; i++) {
+				buttons[i].addEventListener("click", function () {
+					if (buttons[i].classList.contains("btn-green")) {
+						shapeColor = "#1b5e20";
+					} else if (buttons[i].classList.contains("btn-yellow")) {
+						shapeColor = "#f57f17";
+					} else if (buttons[i].classList.contains("btn-blue")) {
+						shapeColor = "#0d47a1";
+					} else if (buttons[i].classList.contains("btn-violet")) {
+						shapeColor = "#311b92";
+					} else if (buttons[i].classList.contains("btn-clear")) {
+						let shapeColor = "#f57f17"; //back to default
+						canvas.innerHTML = "";
+					}
+				});
+			}
+
+			canvas.addEventListener("click", function (e) {
+				let shape = new Shape(e.clientY, e.clientX, shapeColor);
+				canvas.innerHTML += shape.display();
+			});
+
+			function shrink() {
+				let shapes = document.querySelectorAll("div.shapes");
+				for (let i = 0; i < shapes.length; i++) {
+					shapes[i].style.height = `${parseInt(shapes[i].style.height) - 10}px`;
+					shapes[i].style.width = `${parseInt(shapes[i].style.width) - 10}px`;
+
+					console.log(shapes[i].childNodes);
+
+					shapes[i].childNodes[0].style.top = `${parseInt(shapes[i].childNodes[0].style.top) - 5}px`;
+
+					shapes[i].childNodes[0].style.right = `${parseInt(shapes[i].childNodes[0].style.right) - 5}px`;
+
+					if (parseInt(shapes[i].style.height) === 10 && parseInt(shapes[i].style.width) === 10) {
+						shapes[i].remove();
+					}
+				}
+			}
+
+			setInterval(() => {
+				// console.log("hi");
+				shrink();
+			}, 500);
+		});
+	</script>
+
+	<title>Javascript Track Exam</title>
+	<body>
+		<nav>
+			<div class="nav-wrapper">
+				<ul id="nav-mobile" class="right hide-on-med-and-down">
+					<li>
+						<button type="button" class="btn colors btn-yellow">Yellow</button>
+					</li>
+					<li>
+						<button type="button" class="btn colors btn-green">Green</button>
+					</li>
+					<li>
+						<button type="button" class="btn colors btn-blue">Blue</button>
+					</li>
+					<li>
+						<button type="button" class="btn colors btn-violet">Violet</button>
+					</li>
+
+					<li class="clear">
+						<button type="button" class="btn btn-clear">Clear</button>
+					</li>
+				</ul>
+			</div>
+		</nav>
+
+		<main>
+			<!-- canvas -->
+			<div class="canvas">
+				<!-- <div
+					class="shapes"
+					style="
+						position: absolute;
+						top: 40px;
+						left: 80 px;
+						width: 200px;
+						height: 200px;
+						border-radius: 50%;
+						background-color: #fff;
+						color: red;
+					"
+				>
+					<p style="position: absolute; right: 80px; top: 90px">Mavis</p>
+				</div> -->
+			</div>
+			<!-- players -->
+			<div class="players">
+				<h6>The players in this server:</h6>
+				<ul>
+					<li>Ivan</li>
+					<li>Mavis</li>
+				</ul>
+			</div>
+		</main>
+	</body>
+</html>
